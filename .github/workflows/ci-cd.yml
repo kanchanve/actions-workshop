@@ -1,20 +1,28 @@
 name: CI and CD
 
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
 on:
   push:
-    branches: [ main ]
+    branches: 
+    - main 
+    - releases/*
   pull_request:
-    branches: [ main ]
+    branches: 
+    - main 
+    - releases/*
 
 jobs:
-
   build-test:
-    name: Build and Test
+
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x, 15.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -23,21 +31,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build --if-present
-    - run: npm test 
-
-  upload-artifact:
-    needs: build-test
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: npm install and build
-      run: |
-        npm install
-        npm run build
-    - uses: actions/upload-artifact@v2
-      with:
-        name: my-artifact
-        path: build/
+    - run: npm test
         
   build-and-deploy-int:
     name: Deploy int environment
@@ -57,7 +51,7 @@ jobs:
         
   deploy-staging:
     name: Deploy to Staging
-    needs: [upload-artifact, build-and-deploy-int]
+    needs: build-and-deploy-int
     runs-on: ubuntu-latest
     environment: staging
     steps:
