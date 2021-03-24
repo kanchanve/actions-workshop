@@ -1,0 +1,60 @@
+# CD workflow for React app
+
+name: React App CD
+
+on:
+  push:
+    branches:
+    - releases/*
+
+env:
+  owner: kaverma
+  domain: github.io
+  dev-test-repo: actions-workshop
+  prod-repo: actions-workshop-prod
+
+jobs:
+  deploy-dev-test:
+    name: Deploy to Dev test environment
+    runs-on: ubuntu-latest
+    environment: 
+      name: DevTest
+      url: https://${{ env.owner }}.${{ env.domain }}/${{ env.dev-test-repo }}
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x, 15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v2.3.1
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+      - name: Deploy 
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: build # The folder the action should deploy.
+
+  deploy-prod:
+    name: Deploy to Production environment
+    needs: [deploy-dev-test]
+    runs-on: ubuntu-latest
+    environment:
+      name: Production
+      url: https://${{ env.owner }}.${{ env.domain }}/${{ env.prod-repo }}
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v2.3.1
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with: 
+          branch: gh-pages
+          folder: build
+          token: ${{ secrets.TOKEN }}
+          repository-name: ${{ env.owner }}/${{ env.prod-repo }}
