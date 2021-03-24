@@ -9,7 +9,7 @@ on:
     - releases/*
 
 env:
-  owner: kaverma
+  owner: kanchanve
   domain: github.io
   dev-test-repo: actions-workshop
   prod-repo: actions-workshop-prod
