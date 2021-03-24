@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: DevTest
-      url: https://${{ env.owner }}.${{ env.domain }}/${{ env.dev-test-repo }}
+      url: https://${{ env.owner }}.${{ env.domain }}/${{ env.dev-test-repo }}//
     steps:
       - name: Checkout 
         uses: actions/checkout@v2.3.1
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-      url: https://${{ env.owner }}.${{ env.domain }}/${{ env.prod-repo }}
+      url: https://${{ env.owner }}.${{ env.domain }}/${{ env.prod-repo }}//
     steps:
       - name: Checkout 
         uses: actions/checkout@v2.3.1
