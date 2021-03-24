@@ -22,4 +22,3 @@
 - [GitHub Docs: GitHub Actions](https://docs.github.com/actions)
 - [GitHub Docs: Workflow syntax](https://docs.github.com/actions/reference/workflow-syntax-for-github-actions)
 - [GitHub Docs: GitHub Packages](https://docs.github.com/packages)
-
