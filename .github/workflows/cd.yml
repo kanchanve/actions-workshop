@@ -11,8 +11,6 @@ on:
 env:
   owner: kanchanve
   domain: github.io
-  dev-test-repo: actions-workshop
-  prod-repo: actions-workshop-prod
 
 jobs:
   deploy-dev-test:
@@ -20,7 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: DevTest
-      url: https://${{ env.owner }}.${{ env.domain }}/${{ env.dev-test-repo }}//
+      url: https://${{ env.owner }}.${{ env.domain }}/${{ env.repo }}//
+    env:
+      repo: actions-workshop
     steps:
       - name: Checkout 
         uses: actions/checkout@v2.3.1
@@ -40,7 +40,9 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-      url: https://${{ env.owner }}.${{ env.domain }}/${{ env.prod-repo }}//
+      url: https://${{ env.owner }}.${{ env.domain }}/${{ env.repo }}//
+    env:
+      repo: actions-workshop-prod
     steps:
       - name: Checkout 
         uses: actions/checkout@v2.3.1
@@ -54,4 +56,4 @@ jobs:
           branch: gh-pages
           folder: build
           token: ${{ secrets.TOKEN }}
-          repository-name: ${{ env.owner }}/${{ env.prod-repo }}
+          repository-name: ${{ env.owner }}/${{ env.repo }}
